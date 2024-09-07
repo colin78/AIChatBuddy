@@ -63,6 +63,12 @@ def get_messages(user_id):
     messages = Message.query.filter_by(user_id=user_id).order_by(Message.timestamp).all()
     return jsonify([message.to_dict() for message in messages])
 
+@app.route("/api/messages/<int:user_id>", methods=["DELETE"])
+def clear_chat_history(user_id):
+    Message.query.filter_by(user_id=user_id).delete()
+    db.session.commit()
+    return jsonify({"message": "Chat history cleared successfully"})
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()

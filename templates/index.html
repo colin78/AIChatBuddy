@@ -3,23 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chat Application</title>
+    <title>Chat with ColinGPT</title>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
     <div id="app">
         <div id="login-container">
-            <h1>Welcome to AI Chat</h1>
+            <h1>Welcome to AI Chat with ColinGPT</h1>
             <input type="text" id="username-input" placeholder="Enter your username">
-            <button id="login-button">Join Chat</button>
+            <button id="login-button">Start Chat</button>
         </div>
         <div id="chat-container" style="display: none;">
-            <h2>Chat with AI</h2>
+            <h2>Chat with ColinGPT</h2>
             <div id="chat-messages"></div>
             <div id="chat-input">
                 <input type="text" id="message-input" placeholder="Type your message...">
                 <button id="send-button">Send</button>
             </div>
+            <div id="powered-by">Powered by OpenAI GPT-4</div>
+            <button id="clear-chat-button">Clear Chat History</button>
         </div>
     </div>
     <script src="/static/js/app.js"></script>

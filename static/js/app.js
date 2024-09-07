@@ -8,9 +8,11 @@ const loginButton = document.getElementById('login-button');
 const chatMessages = document.getElementById('chat-messages');
 const messageInput = document.getElementById('message-input');
 const sendButton = document.getElementById('send-button');
+const clearChatButton = document.getElementById('clear-chat-button');
 
 loginButton.addEventListener('click', login);
 sendButton.addEventListener('click', sendMessage);
+clearChatButton.addEventListener('click', clearChatHistory);
 messageInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessage();
 });
@@ -75,4 +77,18 @@ function displayMessage(message) {
     messageElement.textContent = `${message.is_ai ? 'AI' : username}: ${message.content}`;
     chatMessages.appendChild(messageElement);
     chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function clearChatHistory() {
+    if (confirm('Are you sure you want to clear the chat history?')) {
+        fetch(`/api/messages/${userId}`, {
+            method: 'DELETE',
+        })
+        .then(response => response.json())
+        .then(data => {
+            chatMessages.innerHTML = '';
+            alert(data.message);
+        })
+        .catch(error => console.error('Error:', error));
+    }
 }
