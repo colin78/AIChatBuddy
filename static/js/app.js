@@ -80,15 +80,12 @@ function displayMessage(message) {
 }
 
 function clearChatHistory() {
-    if (confirm('Are you sure you want to clear the chat history?')) {
-        fetch(`/api/messages/${userId}`, {
-            method: 'DELETE',
-        })
-        .then(response => response.json())
-        .then(data => {
-            chatMessages.innerHTML = '';
-            alert(data.message);
-        })
-        .catch(error => console.error('Error:', error));
-    }
+    fetch(`/api/messages/${userId}`, {
+        method: 'DELETE',
+    })
+    .then(response => response.json())
+    .then(data => {
+        chatMessages.innerHTML = '';
+    })
+    .catch(error => console.error('Error:', error));
 }
