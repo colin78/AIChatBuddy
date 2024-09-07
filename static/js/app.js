@@ -14,7 +14,10 @@ loginButton.addEventListener('click', login);
 sendButton.addEventListener('click', sendMessage);
 clearChatButton.addEventListener('click', clearChatHistory);
 messageInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendMessage();
+    if (e.key === 'Enter') {
+        e.preventDefault(); // Prevent default 'Enter' key behavior
+        sendMessage();
+    }
 });
 
 function login() {
