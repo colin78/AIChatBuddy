@@ -49,6 +49,7 @@ function loadChatHistory() {
             messages.forEach(message => {
                 displayMessage(message);
             });
+            scrollToBottom();
         })
         .catch(error => console.error('Error:', error));
 }
@@ -68,6 +69,7 @@ function sendMessage() {
             displayMessage(data.user_message);
             displayMessage(data.ai_message);
             messageInput.value = '';
+            scrollToBottom();
         })
         .catch(error => console.error('Error:', error));
     }
@@ -79,6 +81,9 @@ function displayMessage(message) {
     messageElement.classList.add(message.is_ai ? 'ai-message' : 'user-message');
     messageElement.textContent = `${message.is_ai ? 'AI' : username}: ${message.content}`;
     chatMessages.appendChild(messageElement);
+}
+
+function scrollToBottom() {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
