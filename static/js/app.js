@@ -9,10 +9,12 @@ const chatMessages = document.getElementById('chat-messages');
 const messageInput = document.getElementById('message-input');
 const sendButton = document.getElementById('send-button');
 const clearChatButton = document.getElementById('clear-chat-button');
+const settingsButton = document.getElementById('settings-button');
 
 loginButton.addEventListener('click', login);
 sendButton.addEventListener('click', sendMessage);
 clearChatButton.addEventListener('click', clearChatHistory);
+settingsButton.addEventListener('click', openSettings);
 messageInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         e.preventDefault(); // Prevent default 'Enter' key behavior
@@ -96,4 +98,8 @@ function clearChatHistory() {
         chatMessages.innerHTML = '';
     })
     .catch(error => console.error('Error:', error));
+}
+
+function openSettings() {
+    alert('Settings functionality coming soon!');
 }
