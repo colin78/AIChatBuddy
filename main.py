@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from models import db, User, Message
-from chat_request import send_openai_request, update_openai_context, get_context
+from chat_request import send_openai_request
 
 class Base(DeclarativeBase):
     pass
@@ -79,19 +79,6 @@ def get_conversation_starters():
         "Who is your favorite person?"
     ]
     return jsonify(starters)
-
-@app.route("/api/colin_prompt", methods=["GET"])
-def get_colin_prompt():
-    prompt = get_context()
-    return jsonify({"prompt": prompt})
-
-@app.route("/api/colin_prompt", methods=["POST"])
-def update_colin_prompt():
-    new_prompt = request.json.get("prompt")
-    if new_prompt:
-        update_openai_context(new_prompt)
-        return jsonify({"message": "Prompt updated successfully"})
-    return jsonify({"error": "Invalid prompt"}), 400
 
 if __name__ == "__main__":
     with app.app_context():
