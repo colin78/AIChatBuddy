@@ -141,25 +141,43 @@ button:hover {
 
 #conversation-starters {
     margin-bottom: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 10px;
+    overflow-x: auto;
 }
 
 #starters-list {
     list-style-type: none;
     padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
 }
 
 #starters-list li {
     cursor: pointer;
-    padding: 5px 10px;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
+    padding: 8px 12px;
+    background-color: #ffffff;
+    border: 1px solid #007bff;
+    border-radius: 20px;
+    transition: all 0.3s;
+    font-size: 14px;
+    color: #007bff;
+    white-space: nowrap;
+    flex-shrink: 0;
     margin-bottom: 5px;
-    transition: background-color 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #starters-list li:hover {
-    background-color: #e9ecef;
+    background-color: #007bff;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 @media (max-width: 600px) {
@@ -170,5 +188,14 @@ button:hover {
 
     #chat-messages {
         height: calc(100vh - 400px);
+    }
+
+    #conversation-starters {
+        margin-bottom: 10px;
+    }
+
+    #starters-list li {
+        padding: 6px 10px;
+        font-size: 13px;
     }
 }
