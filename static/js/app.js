@@ -12,6 +12,12 @@ const clearChatButton = document.getElementById('clear-chat-button');
 const settingsButton = document.getElementById('settings-button');
 const startersList = document.getElementById('starters-list');
 
+// Modal elements
+const modal = document.getElementById('settings-modal');
+const closeModal = document.getElementsByClassName('close')[0];
+const colinPrompt = document.getElementById('colin-prompt');
+const savePromptButton = document.getElementById('save-prompt');
+
 loginButton.addEventListener('click', login);
 sendButton.addEventListener('click', sendMessage);
 clearChatButton.addEventListener('click', clearChatHistory);
@@ -22,6 +28,15 @@ messageInput.addEventListener('keypress', (e) => {
         sendMessage();
     }
 });
+
+// Modal event listeners
+closeModal.addEventListener('click', closeSettings);
+window.addEventListener('click', (event) => {
+    if (event.target === modal) {
+        closeSettings();
+    }
+});
+savePromptButton.addEventListener('click', savePrompt);
 
 function login() {
     username = usernameInput.value.trim();
@@ -38,6 +53,7 @@ function login() {
             userId = data.id;
             loginContainer.style.display = 'none';
             chatContainer.style.display = 'block';
+            settingsButton.style.display = 'block'; // Add this line
             loadChatHistory();
             loadConversationStarters();
         })
@@ -103,7 +119,36 @@ function clearChatHistory() {
 }
 
 function openSettings() {
-    alert('Settings functionality coming soon!');
+    fetch('/api/colin_prompt')
+        .then(response => response.json())
+        .then(data => {
+            colinPrompt.value = data.prompt;
+            modal.style.display = 'block';
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function closeSettings() {
+    modal.style.display = 'none';
+}
+
+function savePrompt() {
+    const newPrompt = colinPrompt.value.trim();
+    if (newPrompt) {
+        fetch('/api/colin_prompt', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ prompt: newPrompt }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Prompt updated successfully!');
+            closeSettings();
+        })
+        .catch(error => console.error('Error:', error));
+    }
 }
 
 function loadConversationStarters() {
@@ -123,3 +168,6 @@ function loadConversationStarters() {
         })
         .catch(error => console.error('Error:', error));
 }
+
+// Initial load
+loadConversationStarters();
