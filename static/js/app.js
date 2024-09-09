@@ -10,6 +10,7 @@ const messageInput = document.getElementById('message-input');
 const sendButton = document.getElementById('send-button');
 const clearChatButton = document.getElementById('clear-chat-button');
 const settingsButton = document.getElementById('settings-button');
+const startersList = document.getElementById('starters-list');
 
 loginButton.addEventListener('click', login);
 sendButton.addEventListener('click', sendMessage);
@@ -17,7 +18,7 @@ clearChatButton.addEventListener('click', clearChatHistory);
 settingsButton.addEventListener('click', openSettings);
 messageInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
-        e.preventDefault(); // Prevent default 'Enter' key behavior
+        e.preventDefault();
         sendMessage();
     }
 });
@@ -38,6 +39,7 @@ function login() {
             loginContainer.style.display = 'none';
             chatContainer.style.display = 'block';
             loadChatHistory();
+            loadConversationStarters();
         })
         .catch(error => console.error('Error:', error));
     }
@@ -102,4 +104,22 @@ function clearChatHistory() {
 
 function openSettings() {
     alert('Settings functionality coming soon!');
+}
+
+function loadConversationStarters() {
+    fetch('/api/conversation_starters')
+        .then(response => response.json())
+        .then(starters => {
+            startersList.innerHTML = '';
+            starters.forEach(starter => {
+                const li = document.createElement('li');
+                li.textContent = starter;
+                li.addEventListener('click', () => {
+                    messageInput.value = starter;
+                    sendMessage();
+                });
+                startersList.appendChild(li);
+            });
+        })
+        .catch(error => console.error('Error:', error));
 }

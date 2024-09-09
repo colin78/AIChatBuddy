@@ -28,7 +28,7 @@ body {
     flex-direction: column;
 }
 
-h1, h2 {
+h1, h2, h3 {
     margin-top: 0;
     color: #333;
 }
@@ -69,7 +69,7 @@ button:hover {
     border-radius: 4px;
     padding: 10px;
     margin-bottom: 10px;
-    height: 400px; /* Set a fixed height */
+    height: 300px;
 }
 
 .message {
@@ -139,6 +139,29 @@ button:hover {
     background-color: #5a6268;
 }
 
+#conversation-starters {
+    margin-bottom: 15px;
+}
+
+#starters-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#starters-list li {
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    transition: background-color 0.3s;
+}
+
+#starters-list li:hover {
+    background-color: #e9ecef;
+}
+
 @media (max-width: 600px) {
     #app {
         height: 100vh;
@@ -146,6 +169,6 @@ button:hover {
     }
 
     #chat-messages {
-        height: calc(100vh - 300px);
+        height: calc(100vh - 400px);
     }
 }
