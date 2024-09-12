@@ -29,6 +29,14 @@
             </div>
             <button id="clear-chat-button">Clear Chat History</button>
             <div id="powered-by" class="powered-by">Powered by OpenAI GPT-3 and Flask</div>
+            <!-- Add this inside the body -->
+            <div id="advanced-settings-container">
+                <button id="advanced-settings-button">Advanced Settings</button>
+                <div id="advanced-settings-content" style="display: none;">
+                    <textarea id="context-input" rows="10" cols="50"></textarea>
+                    <button id="save-context-button">Save Context</button>
+                </div>
+            </div>
         </div>
     </div>
     <script src="/static/js/app.js"></script>

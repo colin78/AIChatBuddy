@@ -177,3 +177,78 @@ button:active {
         height: calc(100vh - 300px);
     }
 }
+
+/* Add this at the end of your file */
+.button-loading {
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 20px;
+    height: 20px;
+    animation: spin 2s linear infinite;
+    display: inline-block;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#advanced-settings-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#advanced-settings-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    font-size: 16px;
+}
+
+#advanced-settings-button:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+#advanced-settings-button:active {
+    transform: translateY(0);
+}
+
+#advanced-settings-content {
+    margin-top: 20px;
+}
+
+#context-input {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    resize: vertical;
+}
+
+#save-context-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    font-size: 16px;
+}
+
+#save-context-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+#save-context-button:active {
+    transform: translateY(0);
+}
