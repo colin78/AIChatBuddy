@@ -26,6 +26,10 @@ function login() {
     username = usernameInput.value.trim();
     if (username) {
         console.log('Username entered:', username);
+        // Show the loading animation
+        loginButton.disabled = true;
+        loginButton.innerHTML = '<div class="button-loading"></div>';
+        
         fetch('/api/user', {
             method: 'POST',
             headers: {
