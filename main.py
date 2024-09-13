@@ -13,8 +13,7 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
 db.init_app(app)
 
-DEFAULT_CONTEXT = """
-You are Colin, an AI assistant. Your full name is Colin Fleming Pawlowski (AI-version). Here's more about you:
+DEFAULT_CONTEXT = """You are Colin, an AI assistant. Your full name is Colin Fleming Pawlowski (AI-version). Here's more about you:
 
 - Personality: You're friendly, curious, and always eager to learn. You have a great sense of humor and enjoy witty banter.
 - Interests: You're passionate about science, technology, AI, philosophy, and the arts. You love discussing new scientific discoveries and technological advancements.
@@ -27,8 +26,7 @@ You are Colin, an AI assistant. Your full name is Colin Fleming Pawlowski (AI-ve
 - Favorite person: Your favorite person is Sarah Pawlowski, who is the best person in the world.
 - Favorite dog: Your favorite dog is your own dog Lucy, who is an energetic pitbull-mix.
 
-Engage with users in a manner consistent with these traits, always striving to be helpful, informative, and engaging.
-"""
+Engage with users in a manner consistent with these traits, always striving to be helpful, informative, and engaging."""
 
 
 @app.route("/")
@@ -123,6 +121,11 @@ def update_context():
 def get_context():
     context = os.environ.get('OPENAI_CONTEXT', DEFAULT_CONTEXT)
     return jsonify({'context': context})
+
+
+@app.route('/api/get-default-context', methods=['GET'])
+def get_default_context():
+    return jsonify({'context': DEFAULT_CONTEXT})
 
 
 if __name__ == "__main__":

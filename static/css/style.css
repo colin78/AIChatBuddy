@@ -252,3 +252,22 @@ button:active {
 #save-context-button:active {
     transform: translateY(0);
 }
+
+#reset-context-button {
+    background-color: #a805ff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    font-size: 16px;
+    margin-left: 10px; /* To create space between the Save button and Reset button */
+}
+#reset-context-button:hover {
+    background-color: #5e1f70;
+    transform: translateY(-2px);
+}
+#reset-context-button:active {
+    transform: translateY(0);
+}

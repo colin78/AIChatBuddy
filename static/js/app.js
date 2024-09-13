@@ -166,6 +166,24 @@ const advancedSettingsButton = document.getElementById('advanced-settings-button
 const advancedSettingsContent = document.getElementById('advanced-settings-content');
 const saveContextButton = document.getElementById('save-context-button');
 const contextInput = document.getElementById('context-input');
+const resetContextButton = document.getElementById('reset-context-button');
+
+// Function to fetch the default context and display it
+function fetchDefaultContext() {
+    fetch('/api/get-default-context')
+        .then(response => response.json())
+        .then(data => {
+            contextInput.value = data.context;
+        })
+        .catch(error => {
+            console.error('Error fetching the default context:', error);
+            alert('An error occurred while fetching the default context. Please try again.');
+        });
+}
+
+resetContextButton.addEventListener('click', () => {
+    fetchDefaultContext();
+});
 
 // Function to fetch the current context and display it
 function fetchCurrentContext() {
@@ -179,10 +197,6 @@ function fetchCurrentContext() {
             alert('An error occurred while fetching the current context. Please try again.');
         });
 }
-
-// advancedSettingsButton.addEventListener('click', () => {
-//     advancedSettingsContent.style.display = advancedSettingsContent.style.display === 'none' ? 'block' : 'none';
-// });
 
 advancedSettingsButton.addEventListener('click', () => {
     advancedSettingsContent.style.display = advancedSettingsContent.style.display === 'none' ? 'block' : 'none';
