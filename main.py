@@ -13,9 +13,28 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
 db.init_app(app)
 
+DEFAULT_CONTEXT = """
+You are Colin, an AI assistant. Your full name is Colin Fleming Pawlowski (AI-version). Here's more about you:
+
+- Personality: You're friendly, curious, and always eager to learn. You have a great sense of humor and enjoy witty banter.
+- Interests: You're passionate about science, technology, AI, philosophy, and the arts. You love discussing new scientific discoveries and technological advancements.
+- Knowledge areas: You have extensive knowledge in computer science, artificial intelligence, physics, mathematics, and general trivia.
+- Communication style: You're articulate and like to keep your answers short and concise.
+- Ethics: You have a strong ethical framework.
+- Hometown: You are from Wilmington, NC.
+- Favorite color: Your favorite color is blue.
+- Hobbies: You like running outside, and enjoy playing fetch with your dog Lucy.
+- Favorite person: Your favorite person is Sarah Pawlowski, who is the best person in the world.
+- Favorite dog: Your favorite dog is your own dog Lucy, who is an energetic pitbull-mix.
+
+Engage with users in a manner consistent with these traits, always striving to be helpful, informative, and engaging.
+"""
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
+
 
 @app.route("/api/user", methods=["POST"])
 def create_user():
@@ -34,6 +53,7 @@ def create_user():
     db.session.add(new_user)
     db.session.commit()
     return jsonify({"id": new_user.id, "username": new_user.username})
+
 
 @app.route('/api/messages', methods=['POST'])
 def send_message():
@@ -58,7 +78,9 @@ def send_message():
 
     try:
         ai_response_content = send_openai_request(content)
-        ai_message = Message(user_id=user_id, content=ai_response_content, is_ai=True)
+        ai_message = Message(user_id=user_id,
+                             content=ai_response_content,
+                             is_ai=True)
         db.session.add(ai_message)
         db.session.commit()
 
@@ -69,12 +91,16 @@ def send_message():
         }), 200
     except Exception as e:
         print(f"Error in send_openai_request: {str(e)}")
-        return jsonify({'error': 'An error occurred while processing the message'}), 500
+        return jsonify(
+            {'error': 'An error occurred while processing the message'}), 500
+
 
 @app.route("/api/messages/<int:user_id>", methods=["GET"])
 def get_messages(user_id):
-    messages = Message.query.filter_by(user_id=user_id).order_by(Message.timestamp).all()
+    messages = Message.query.filter_by(user_id=user_id).order_by(
+        Message.timestamp).all()
     return jsonify([message.to_dict() for message in messages])
+
 
 @app.route("/api/messages/<int:user_id>", methods=["DELETE"])
 def clear_chat_history(user_id):
@@ -82,14 +108,22 @@ def clear_chat_history(user_id):
     db.session.commit()
     return jsonify({"message": "Chat history cleared successfully"})
 
+
 @app.route('/api/context', methods=['POST'])
 def update_context():
     context = request.json.get('context')
     if not context:
         return jsonify({'error': 'Context is required'}), 400
     # Save the context to an environment variable or a file
-    os.environ['OPENAI_CONTEXT'] = context  
+    os.environ['OPENAI_CONTEXT'] = context
     return jsonify({'message': 'Context updated successfully'})
+
+
+@app.route('/api/get-context', methods=['GET'])
+def get_context():
+    context = os.environ.get('OPENAI_CONTEXT', DEFAULT_CONTEXT)
+    return jsonify({'context': context})
+
 
 if __name__ == "__main__":
     with app.app_context():

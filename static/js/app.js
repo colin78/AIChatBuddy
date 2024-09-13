@@ -167,8 +167,28 @@ const advancedSettingsContent = document.getElementById('advanced-settings-conte
 const saveContextButton = document.getElementById('save-context-button');
 const contextInput = document.getElementById('context-input');
 
+// Function to fetch the current context and display it
+function fetchCurrentContext() {
+    fetch('/api/get-context')
+        .then(response => response.json())
+        .then(data => {
+            contextInput.value = data.context;
+        })
+        .catch(error => {
+            console.error('Error fetching the current context:', error);
+            alert('An error occurred while fetching the current context. Please try again.');
+        });
+}
+
+// advancedSettingsButton.addEventListener('click', () => {
+//     advancedSettingsContent.style.display = advancedSettingsContent.style.display === 'none' ? 'block' : 'none';
+// });
+
 advancedSettingsButton.addEventListener('click', () => {
     advancedSettingsContent.style.display = advancedSettingsContent.style.display === 'none' ? 'block' : 'none';
+    if (advancedSettingsContent.style.display === 'block') {
+        fetchCurrentContext();
+    }
 });
 
 saveContextButton.addEventListener('click', () => {
