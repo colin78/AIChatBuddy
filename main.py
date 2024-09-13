@@ -106,6 +106,18 @@ def clear_chat_history(user_id):
     db.session.commit()
     return jsonify({"message": "Chat history cleared successfully"})
 
+@app.route('/api/conversation_starters', methods=['GET'])
+def get_conversation_starters():
+    # Ensure this returns a list of starter messages
+    starters = [
+        "What is your favorite color?",
+        "Can you tell me about yourself?",
+        "Where are you from?",
+        "Do you have a dog?",
+        "Who is your favorite person?"
+    ]
+    return jsonify(starters)
+
 
 @app.route('/api/context', methods=['POST'])
 def update_context():
