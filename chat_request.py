@@ -4,9 +4,10 @@ from openai import OpenAI
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
+
 def send_openai_request(prompt: str) -> str:
     context = os.environ.get("OPENAI_CONTEXT")
-    
+
     if not context:
         context = """
             You are Colin, an AI assistant. Your full name is Colin Fleming Pawlowski (AI-version). Here's more about you:
@@ -26,14 +27,19 @@ def send_openai_request(prompt: str) -> str:
             """
 
     try:
-        completion = openai_client.chat.completions.create(
-            model="gpt-4",
-            messages=[
-                {"role": "system", "content": context},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=1000
-        )
+        completion = openai_client.chat.completions.create(model="gpt-4",
+                                                           messages=[{
+                                                               "role":
+                                                               "system",
+                                                               "content":
+                                                               context
+                                                           }, {
+                                                               "role":
+                                                               "user",
+                                                               "content":
+                                                               prompt
+                                                           }],
+                                                           max_tokens=1000)
         content = completion.choices[0].message.content
         if not content:
             raise ValueError("OpenAI returned an empty response.")
@@ -43,24 +49,25 @@ def send_openai_request(prompt: str) -> str:
         print(error_message)
         return f"I apologize, but I encountered an error while processing your request. {error_message}"
 
-def send_openai_request_with_context(prompt: str, context: str) -> str:
-    if not context:
-        return send_openai_request(prompt)
-    
-    try:
-        completion = openai_client.chat.completions.create(
-            model="gpt-4",
-            messages=[
-                {"role": "system", "content": context},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=1000
-        )
-        content = completion.choices[0].message.content
-        if not content:
-            raise ValueError("OpenAI returned an empty response.")
-        return content
-    except Exception as e:
-        error_message = f"Error in send_openai_request_with_context: {str(e)}"
-        print(error_message)
-        return f"I apologize, but I encountered an error while processing your request. {error_message}"
+
+# def send_openai_request_with_context(prompt: str, context: str) -> str:
+#     if not context:
+#         return send_openai_request(prompt)
+
+#     try:
+#         completion = openai_client.chat.completions.create(
+#             model="gpt-4",
+#             messages=[
+#                 {"role": "system", "content": context},
+#                 {"role": "user", "content": prompt}
+#             ],
+#             max_tokens=1000
+#         )
+#         content = completion.choices[0].message.content
+#         if not content:
+#             raise ValueError("OpenAI returned an empty response.")
+#         return content
+#     except Exception as e:
+#         error_message = f"Error in send_openai_request_with_context: {str(e)}"
+#         print(error_message)
+#         return f"I apologize, but I encountered an error while processing your request. {error_message}"

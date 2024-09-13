@@ -82,6 +82,15 @@ def clear_chat_history(user_id):
     db.session.commit()
     return jsonify({"message": "Chat history cleared successfully"})
 
+@app.route('/api/context', methods=['POST'])
+def update_context():
+    context = request.json.get('context')
+    if not context:
+        return jsonify({'error': 'Context is required'}), 400
+    # Save the context to an environment variable or a file
+    os.environ['OPENAI_CONTEXT'] = context  
+    return jsonify({'message': 'Context updated successfully'})
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()

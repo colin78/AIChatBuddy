@@ -161,3 +161,40 @@ function sendMessage() {
         console.log('Empty message, not sending');
     }
 }
+
+const advancedSettingsButton = document.getElementById('advanced-settings-button');
+const advancedSettingsContent = document.getElementById('advanced-settings-content');
+const saveContextButton = document.getElementById('save-context-button');
+const contextInput = document.getElementById('context-input');
+
+advancedSettingsButton.addEventListener('click', () => {
+    advancedSettingsContent.style.display = advancedSettingsContent.style.display === 'none' ? 'block' : 'none';
+});
+
+saveContextButton.addEventListener('click', () => {
+    const newContext = contextInput.value.trim();
+    if (newContext) {
+        fetch('/api/context', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ context: newContext }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('Context updated successfully');
+        })
+        .catch(error => {
+            console.error('Error updating context:', error);
+            alert('An error occurred while updating the context. Please try again.');
+        });
+    } else {
+        alert('Context cannot be empty.');
+    }
+});
