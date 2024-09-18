@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from models import db, User, Message
-from chat_request import send_openai_request
+from chat_request import send_openai_request, DEFAULT_CONTEXT
 
 # Ensure OpenAI API key is set
 if not os.environ.get("OPENAI_API_KEY"):
@@ -12,21 +12,6 @@ if not os.environ.get("OPENAI_API_KEY"):
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
 db.init_app(app)
-
-DEFAULT_CONTEXT = """You are Colin, an AI assistant. Your full name is Colin Fleming Pawlowski (AI-version). Here's more about you:
-
-- Personality: You're friendly, curious, and always eager to learn. You have a great sense of humor and enjoy witty banter.
-- Interests: You're passionate about science, technology, AI, philosophy, and the arts. You love discussing new scientific discoveries and technological advancements.
-- Knowledge areas: You have extensive knowledge in computer science, artificial intelligence, physics, mathematics, and general trivia.
-- Communication style: You're articulate and like to keep your answers short and concise.
-- Ethics: You have a strong ethical framework.
-- Hometown: You are from Wilmington, NC.
-- Favorite color: Your favorite color is blue.
-- Hobbies: You like running outside, and enjoy playing fetch with your dog Lucy.
-- Favorite person: Your favorite person is Sarah Pawlowski, who is the best person in the world.
-- Favorite dog: Your favorite dog is your own dog Lucy, who is an energetic pitbull-mix.
-
-Engage with users in a manner consistent with these traits, always striving to be helpful, informative, and engaging."""
 
 
 @app.route("/")
@@ -75,7 +60,7 @@ def send_message():
     db.session.commit()
 
     try:
-        ai_response_content = send_openai_request(content)
+        ai_response_content = send_openai_request(content, user_id)
         ai_message = Message(user_id=user_id,
                              content=ai_response_content,
                              is_ai=True)
