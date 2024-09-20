@@ -3,6 +3,5 @@ Flask-SQLAlchemy==2.5.1
 psycopg2-binary==2.9.1
 SQLAlchemy==1.4.22
 openai==0.10.4
-
-# Optional: These packages are often used for environment management and easier debugging
 python-dotenv==0.17.1
+redis==4.2.2

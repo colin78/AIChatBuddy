@@ -4,6 +4,7 @@ from openai import OpenAI
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
 from models import Message
+import redis
 
 DEFAULT_CONTEXT = """You are Colin, an AI assistant. Your full name is Colin Fleming Pawlowski (AI-version). Here's more about you:
 
@@ -20,6 +21,9 @@ DEFAULT_CONTEXT = """You are Colin, an AI assistant. Your full name is Colin Fle
 
 Engage with users in a manner consistent with these traits, always striving to be helpful, informative, and engaging."""
 
+# Set up Redis client
+r = redis.Redis(host='localhost', port=6379, db=0)
+
 
 # Fetch conversation history
 def fetch_conversation_history(user_id):
@@ -27,7 +31,7 @@ def fetch_conversation_history(user_id):
         messages = Message.query.filter_by(user_id=user_id).order_by(
             Message.timestamp).all()
         conversation_history = "\n".join([
-            f"{'ColinGPT' if msg.is_ai else 'User'}: {msg.content}"
+            f"{'CustomGPT' if msg.is_ai else 'User'}: {msg.content}"
             for msg in messages
         ])
         return conversation_history
@@ -42,8 +46,16 @@ def send_openai_request(prompt: str, user_id: int) -> str:
 
     conversation_history = fetch_conversation_history(user_id)
 
-    full_prompt = f"{context}\n\n{conversation_history}\nColinGPT:"
+    full_prompt = f"{context}\n\n{conversation_history}\nCustomGPT:"
     print(f"Full Prompt: {full_prompt}")  # Log the full prompt
+
+    # Generate cache key
+    cache_key = f"{context}-{full_prompt}"
+    # Check if response is in cache
+    cached_response = r.get(cache_key)
+    if cached_response:
+        print(f"Serving from cache: {cache_key}")
+        return cached_response.decode('utf-8')
 
     try:
         completion = openai_client.chat.completions.create(model="gpt-4",
@@ -57,6 +69,10 @@ def send_openai_request(prompt: str, user_id: int) -> str:
         content = completion.choices[0].message.content
         if not content:
             raise ValueError("OpenAI returned an empty response.")
+
+        # Store response in cache with an expiration time of 1 hour
+        r.setex(cache_key, 3600, content)
+
         return content
     except Exception as e:
         error_message = f"Error in send_openai_request: {str(e)}"

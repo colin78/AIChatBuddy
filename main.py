@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from models import db, User, Message
 from chat_request import send_openai_request, DEFAULT_CONTEXT
+import redis
 
 # Ensure OpenAI API key is set
 if not os.environ.get("OPENAI_API_KEY"):
@@ -12,6 +13,9 @@ if not os.environ.get("OPENAI_API_KEY"):
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
 db.init_app(app)
+
+# Set up Redis client
+r = redis.Redis(host='localhost', port=6379, db=0)
 
 
 @app.route("/")
@@ -91,14 +95,13 @@ def clear_chat_history(user_id):
     db.session.commit()
     return jsonify({"message": "Chat history cleared successfully"})
 
+
 @app.route('/api/conversation_starters', methods=['GET'])
 def get_conversation_starters():
     # Ensure this returns a list of starter messages
     starters = [
-        "What is your favorite color?",
-        "Can you tell me about yourself?",
-        "Where are you from?",
-        "Do you have a dog?",
+        "What is your favorite color?", "Can you tell me about yourself?",
+        "Where are you from?", "Do you have a dog?",
         "Who is your favorite person?"
     ]
     return jsonify(starters)
