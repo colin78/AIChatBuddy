@@ -78,7 +78,7 @@ function displayMessage(message) {
     const messageElement = document.createElement('div');
     messageElement.classList.add('message');
     messageElement.classList.add(message.is_ai ? 'ai-message' : 'user-message');
-    messageElement.textContent = `${message.is_ai ? 'ColinGPT' : username}: ${message.content}`;
+    messageElement.textContent = `${message.is_ai ? 'CustomGPT' : username}: ${message.content}`;
     chatMessages.appendChild(messageElement);
 }
 
