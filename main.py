@@ -6,6 +6,16 @@ from models import db, User, Message
 from chat_request import send_openai_request, DEFAULT_CONTEXT
 import redis
 
+redis_host = os.environ.get('REDIS_HOST', 'localhost')
+redis_port = int(os.environ.get('REDIS_PORT', 6379))
+redis_db = int(os.environ.get('REDIS_DB', 0))
+redis_username = os.environ.get('REDIS_USERNAME', None)
+redis_password = os.environ.get('REDIS_PASSWORD', None)
+
+# Set up Redis client
+r = redis.Redis(host=redis_host, port=redis_port, db=redis_db,
+                username=redis_username, password=redis_password)
+
 # Ensure OpenAI API key is set
 if not os.environ.get("OPENAI_API_KEY"):
     raise ValueError("OPENAI_API_KEY environment variable is not set")
@@ -14,12 +24,18 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
 db.init_app(app)
 
-# Set up Redis client
-r = redis.Redis(host='localhost', port=6379, db=0)
+# @app.route("/")
+# def index():
+#     return render_template("index.html")
 
 
-@app.route("/")
+@app.route('/')
 def index():
+    try:
+        r.ping()
+        print("Redis is connected")
+    except Exception as e:
+        print(f"Redis connection error: {str(e)}")
     return render_template("index.html")
 
 

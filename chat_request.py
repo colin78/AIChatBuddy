@@ -6,6 +6,16 @@ openai_client = OpenAI(api_key=OPENAI_API_KEY)
 from models import Message
 import redis
 
+redis_host = os.environ.get('REDIS_HOST', 'localhost')
+redis_port = int(os.environ.get('REDIS_PORT', 6379))
+redis_db = int(os.environ.get('REDIS_DB', 0))
+redis_username = os.environ.get('REDIS_USERNAME', None)
+redis_password = os.environ.get('REDIS_PASSWORD', None)
+
+# Set up Redis client
+r = redis.Redis(host=redis_host, port=redis_port, db=redis_db,
+                username=redis_username, password=redis_password)
+
 DEFAULT_CONTEXT = """You are Colin, an AI assistant. Your full name is Colin Fleming Pawlowski (AI-version). Here's more about you:
 
 - Personality: You're friendly, curious, and always eager to learn. You have a great sense of humor and enjoy witty banter.
@@ -20,10 +30,6 @@ DEFAULT_CONTEXT = """You are Colin, an AI assistant. Your full name is Colin Fle
 - Favorite dog: Your favorite dog is your own dog Lucy, who is an energetic pitbull-mix.
 
 Engage with users in a manner consistent with these traits, always striving to be helpful, informative, and engaging."""
-
-# Set up Redis client
-r = redis.Redis(host='localhost', port=6379, db=0)
-
 
 # Fetch conversation history
 def fetch_conversation_history(user_id):
