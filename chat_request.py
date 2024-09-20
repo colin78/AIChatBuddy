@@ -77,7 +77,9 @@ def send_openai_request(prompt: str, user_id: int) -> str:
             raise ValueError("OpenAI returned an empty response.")
 
         # Store response in cache with an expiration time of 1 hour
-        r.setex(cache_key, 3600, content)
+        # r.setex(cache_key, 3600, content)
+        # Store response in cache without an expiration time
+        r.set(cache_key, content)
 
         return content
     except Exception as e:
